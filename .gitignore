@@ -2,3 +2,6 @@ local.json
 config.json
 venv/
 .idea
+__pycache__/
+*.py[cod]
+*$py.class
