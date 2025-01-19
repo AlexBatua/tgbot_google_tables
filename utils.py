@@ -14,15 +14,19 @@ def split_message(message) -> tuple | None:
         return price, percent, purchase_type, date
 
 
-def answer_with_params(message, bot, data):
+async def answer_with_params(message, bot, data):
     try:
+        print(data)
         price, percent, purchase_type, _ = data
     except TypeError:
-        bot.reply_to(message, "параметры не распознаны")
+        await bot.send_message(message.chat.id, "Параметры не распознаны")
     else:
-        text = f"Покупка на сумму: {price} \U0001F4B0 \nПроцент с покупки: {percent} \U0001F4C8 \nТип оплаты: " + str(
-            purchase_type)
-        bot.reply_to(message, text)
+        text = (
+            f"Покупка на сумму: {price} \U0001F4B0\n"
+            f"Процент с покупки: {percent} \U0001F4C8\n"
+            f"Тип оплаты: {purchase_type}"
+        )
+        await bot.send_message(message.chat.id, text)
 
 
 def check_purchase_type(message):

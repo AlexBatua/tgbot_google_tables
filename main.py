@@ -1,17 +1,28 @@
-import telebot 
+import logging
 import utils
 import test
+from telegram import Update
+from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filters
+
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
 
 token = '8197686575:AAGtgCPPmN9ag0DJsfqEZBoAUTHn_1N_iQ4'
-bot = telebot.TeleBot(token)
 
 
-@bot.message_handler(content_types=["text"])
-def reply_to_user(message):
+async def google_table_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    message = update.message
     data = utils.split_message(message)
     test.insert_purchase(data)
-    utils.answer_with_params(message, bot, data)
+    await utils.answer_with_params(message, context.bot, data)
 
 
 if __name__ == '__main__':
-    bot.infinity_polling()
+    application = ApplicationBuilder().token(token).build()
+
+    google_table_handler = MessageHandler(filters.TEXT & ~filters.COMMAND, google_table_handler)
+    application.add_handler(google_table_handler)
+
+    application.run_polling()
