@@ -1,6 +1,6 @@
 import logging
 import utils
-import test
+import google_table
 from config import get_tg_token
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filters
@@ -10,10 +10,11 @@ logging.basicConfig(
     level=logging.INFO
 )
 
+
 async def google_table_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.message
     data = utils.split_message(message)
-    test.insert_purchase(data)
+    google_table.insert_purchase(data)
     await utils.answer_with_params(message, context.bot, data)
 
 
